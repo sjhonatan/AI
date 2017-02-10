@@ -1,20 +1,41 @@
 """
 Jhonatan da Silva
 Last Updated version :
-Fri Feb 10 12:10:43 2017
+Fri Feb 10 12:15:05 2017
 Number of code lines: 
-90
+111
 """
+
+""" 
+Algorithms in Artificial Inteligence 
+
+Breadth First Search 
+
+"""
+
 def main():
+    ''' creates a new frontier with initial state and goal state ''' 
     frontier = Queue('California','Washington')
+    ''' creates a set of explored states ''' 
     explored = Set() 
+    ''' adds initial state to explored ''' 
     explored.add(frontier.listStates()[0])
+    ''' while the list is not empty,
+        if list is empty then there's no solution '''
     while not frontier.isEmpty():
+        ''' dequeue from list, gets the last element '''
         state = frontier.dequeue()
+        ''' tests if reaches the goal '''
         if frontier.testGoal(state):
+            ''' breaks when reaches goal ''' 
             break
         else:
+            ''' add node in explored ''' 
             explored.add(state)
+            ''' for every neighboors of current state adds 
+                in the states if the state is not in the explored 
+                list and not in the frontier, that is, the wait list
+                for explore ''' 
             for new in neighboors[state]:
                 if new not in explored.listStates() + frontier.listStates():
                     frontier.enqueue(new)
