@@ -1,79 +1,85 @@
-""" Program for graph-search 
-    Jhonatan da Silva 
-    28/01/2017 """
-
-""" Breadth-first-search uses FIFO
-    First in first out """
-
+"""
+Jhonatan da Silva
+Last Updated version :
+Fri Feb 10 12:10:43 2017
+Number of code lines: 
+90
+"""
 def main():
-    breadthFirstSearch('California', 'Washington')
-
-def breadthFirstSearch(initState,goalState):
-    frontier = search(initState, goalState)
+    frontier = Queue('California','Washington')
+    explored = Set() 
+    explored.add(frontier.listStates()[0])
     while not frontier.isEmpty():
-        """ checks if state is equal to goal """ 
-        if frontier.testGoal():
+        state = frontier.dequeue()
+        if frontier.testGoal(state):
             break
-        """ If not goal, gets the state to search """ 
-        state = frontier.remove()
-        """ add state to explored """ 
-        frontier.addExplored(state)
-        print("List of states  : {}".format(frontier.waiting()))
-        for neighbors in StateNeighbors[state]:
-            if neighbors not in (frontier.Explored()+frontier.waiting()):
-                frontier.add(neighbors)
+        else:
+            explored.add(state)
+            for new in neighboors[state]:
+                if new not in explored.listStates() + frontier.listStates():
+                    frontier.enqueue(new)
     
+
 """ Using FIFO """ 
 class Queue():
-    """ Initialize the search with a state and stateGoal """
+
+    """ Queue --> FIFO : First In First Out """ 
+
     def __init__(self, state,stateGoal):
+        """ Initialize the search with a state and stateGoal """
         self.state = [state]
         self.goal = stateGoal
 
-    """ Equeue := 
-    """
-    def dequeue(self,state):
-        self.state.append(state)
+    def enqueue(self,state):
+        """ Enqueue = add elements to the init of list
+            while the current elements goes to the end
+            of the list """  
+        temp = []
+        temp.append(state)
+        temp.extend(self.state)
+        self.state = temp[:]
+        del temp[:]
     
-    def waiting(self):
-        return self.state
-
-    """ Dequeue := 
-    """
     def dequeue(self):
-        temp = self.state[0]
-        del self.state[0]
+        """ Dequeue = remove from last element """  
+        temp = self.state[-1]
+        del self.state[-1]
         return temp
 
-    """ Tests for the first state on the 'waiting' list if is the goal or not """ 
-    def testGoal(self):
-        print("State : {}, Goal : {}".format(self.state[0],self.goal))
-        if self.state[0] == self.goal:
+    def testGoal(self,state):
+        """ Tests for the first state on the 'waiting' list if is the goal or not """ 
+        print("State : {}, Goal : {}".format(state,self.goal))
+        if state == self.goal:
             return True
         else:
             return False
 
-    """ Returns true if list empty """ 
     def isEmpty(self):
+        """ Returns true if list empty """ 
         if len(self.state) == 0:
             return True
         else:
             return False
 
+    def listStates(self):
+        return self.state
+
 class Set():
-    """ Initialize explored with empty list """
+    """ Explored elements """ 
+
     def __init__(self):
-        sefl.state = []
-    """ Add new state to explored """ 
-    def add(state):
-        self.append(state)
-    """ Returns list of explores states """
-    def listStates():
+        """ Initialize explored with empty list """
+        self.state = []
+    def add(self,state):
+        """ Add new state to explored """ 
+        self.state.append(state)
+    def listStates(self):
+        """ Returns list of explores states """
         return self.state
 
 """ dict with neighbors states I was lazy and just put some states""" 
 
-StateNeighbors = {'California': ['Nevada','Arizona','Oregon'],
+neighboors = {'California': ['Nevada','Arizona','Oregon'],
                   'Oregon':['Washington','Idaho','Nevada'],
                   'Nevada':['Utah','Idaho','Arizona'],
                   'Arizona':['New Mexico'],
